@@ -15,7 +15,8 @@ export async function PATCH(req: NextRequest, context: { params: { id: string } 
 // DELETE /api/jobs/[id] - Job löschen
 
 export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
-  const { id } = context.params;
+  const params = await context.params;
+  const { id } = params;
   await deleteEmailJob(id);
   return NextResponse.json({ ok: true });
 }

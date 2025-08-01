@@ -1,6 +1,10 @@
+
 import { NextRequest, NextResponse } from "next/server";
 import { createEmailJob, getActiveEmailJobs } from "@/lib/db/emailJobs";
 import { startPriceWatchWorkflow } from "@/lib/priceWatch/startWorkflow";
+import { ensureJobRunnerStarted } from "@/lib/priceWatch/jobRunnerInit";
+
+ensureJobRunnerStarted();
 
 // POST /api/jobs - Job anlegen
 export async function POST(req: NextRequest) {
