@@ -9,17 +9,26 @@ export async function POST(req: NextRequest) {
   if (!resources || !tokens || !interval || !email || !template) {
     return NextResponse.json({ error: "Missing fields" }, { status: 400 });
   }
-  const job = await createEmailJob({ resources, tokens, interval, email, template });
-  // Starte den Workflow direkt nach dem Anlegen (nur einmalig, nicht als Intervall!)
-  await startPriceWatchWorkflow({
-    tokens,
-    // Konvertiere Array zu Record für Kompatibilität
-    activeResources: Object.fromEntries(resources.map((r: string) => [r, true])),
-    template,
-    email,
-    interval,
-  });
-  return NextResponse.json(job);
+  try {
+    // Starte den Workflow zuerst (API-Calls, Email). Fehler werden abgefangen.
+    await startPriceWatchWorkflow({
+      tokens,
+      activeResources: Object.fromEntries(resources.map((r: string) => [r, true])),
+      template,
+      email,
+      interval,
+    });
+    // Nur wenn alles erfolgreich war, Job anlegen
+    const job = await createEmailJob({ resources, tokens, interval, email, template });
+    return NextResponse.json(job);
+  } catch (error) {
+    console.error("Job konnte nicht angelegt werden:", error);
+    let message = "Job konnte nicht angelegt werden.";
+    if (typeof error === "object" && error && "message" in error && typeof (error as any).message === "string") {
+      message = (error as { message: string }).message;
+    }
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }
 
 // GET /api/jobs - Alle aktiven Jobs

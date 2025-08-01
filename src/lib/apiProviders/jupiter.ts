@@ -7,7 +7,7 @@ export async function fetchJupiterPrices(tokenIds: string[]): Promise<string | u
     } else {
         ids = tokenIds;
     }
-    const url = `https://little-api.jup.ag/price/v3?ids=${ids}`
+    const url = `https://lite-api.jup.ag/price/v3?ids=${ids}`
     try {
         const response = await axios.get(url, {
             headers: { 'Accept': 'application/json' }
