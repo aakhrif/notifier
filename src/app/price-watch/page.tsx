@@ -5,11 +5,6 @@ import { useRouter } from "next/navigation";
 import { TrashIcon, PlusIcon } from "@heroicons/react/24/outline";
 
 
-
-import { startPriceWatchWorkflow } from "@/lib/priceWatch/startWorkflow";
-
-
-
 const resources = ["Jupiter", "Raydium", "Birdeye"];
 const intervals = [5, 10, 15, 20];
 
@@ -177,13 +172,24 @@ export default function PriceWatchPage() {
         <div className="flex justify-center">
           <button
             type="button"
-            onClick={() => {
-              console.log("Checked Ressourcen:", activeResources);
-              console.log("Tokens:", tokens);
-              console.log("Intervall:", interval);
-              console.log("Empfänger:", email);
-              console.log("Vorlage:", template);
-              router.push("/jobs");
+            onClick={async () => {
+              const res = await fetch("/api/jobs", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  resources: activeResources,
+                  tokens,
+                  interval,
+                  email,
+                  template,
+                }),
+              });
+              if (res.ok) {
+                router.push("/jobs");
+              } else {
+                alert("Fehler beim Anlegen des Jobs!")
+                ;
+              }
             }}
             className="px-6 py-3 rounded-lg bg-[#28ebcf] text-white font-bold shadow-lg hover:bg-[#20cbb0] transition flex items-center gap-2 text-lg"
           >

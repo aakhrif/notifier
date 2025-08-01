@@ -1,0 +1,23 @@
+// Prisma schema for email jobs
+// Save as prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model EmailJob {
+  id         String   @id @default(uuid())
+  resources  String   // JSON-encoded array of resource names
+  tokens     String   // JSON-encoded array of token addresses
+  interval   Int
+  email      String
+  template   String
+  status     String   // "active" | "stopped" | "paused"
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}

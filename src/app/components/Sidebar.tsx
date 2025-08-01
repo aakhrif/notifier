@@ -1,11 +1,12 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChartBarIcon, EyeIcon } from "@heroicons/react/24/outline";
+import { ChartBarIcon, EyeIcon, InboxIcon } from "@heroicons/react/24/outline";
 
 const links = [
   { href: "/price-watch", label: "Price Watch", icon: ChartBarIcon },
   { href: "/whale-watch", label: "Whale Watch", icon: EyeIcon },
+  { href: "/jobs", label: "Jobs", icon: InboxIcon },
 ];
 
 export default function Sidebar() {
