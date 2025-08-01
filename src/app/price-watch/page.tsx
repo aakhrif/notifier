@@ -7,7 +7,7 @@ import { TrashIcon, PlusIcon } from "@heroicons/react/24/outline";
 
 
 const resources = ["Jupiter", "Raydium", "Birdeye"];
-const intervals = [5, 10, 15, 20];
+const intervals = [2, 5, 10, 15, 20];
 
 export default function PriceWatchPage() {
   const { show, hide } = useLoadingOverlay();

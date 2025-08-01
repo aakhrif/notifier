@@ -2,6 +2,7 @@
 
 
 import { useEffect, useState } from "react";
+import { useLoadingOverlay } from "../components/LoadingOverlay";
 
 type Job = {
   id: string;
@@ -14,16 +15,19 @@ type Job = {
 };
 
 export default function JobsPage() {
+  const { hide } = useLoadingOverlay();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    hide(); // Overlay ausblenden, falls von vorheriger Seite noch aktiv
     fetch("/api/jobs")
       .then((res) => res.json())
       .then((data) => {
         setJobs(data);
         setLoading(false);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
