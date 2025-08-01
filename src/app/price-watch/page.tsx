@@ -91,7 +91,8 @@ export default function PriceWatchPage() {
                   type="checkbox"
                   checked={activeResources.includes(name)}
                   onChange={() => toggleResource(name)}
-                  className="accent-[#28ebcf] h-5 w-5 rounded focus:ring-2 focus:ring-[#28ebcf]"
+                  className="accent-[#28ebcf] h-5 w-5 rounded focus:ring-2 focus:ring-[#28ebcf] cursor-pointer"
+                  disabled={name === "Raydium" || name === "Birdeye"}
                 />
                 <span className="text-gray-800 font-medium">{name}</span>
               </label>
@@ -106,7 +107,7 @@ export default function PriceWatchPage() {
                 key={i}
                 type="button"
                 onClick={() => setInterval(i)}
-                className={`px-4 py-2 rounded-lg font-semibold transition shadow-sm border-2 border-transparent
+                className={`px-4 py-2 rounded-lg font-semibold transition shadow-sm border-2 border-transparent cursor-pointer
                   ${
                     interval === i
                       ? "bg-[#28ebcf] text-white border-[#28ebcf]"
@@ -169,7 +170,7 @@ export default function PriceWatchPage() {
             <button
               type="button"
               onClick={addToken}
-              className="px-4 py-3 rounded-lg bg-[#28ebcf] text-white font-bold shadow-md hover:bg-[#20cbb0] transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-3 rounded-lg bg-[#28ebcf] text-white font-bold shadow-md hover:bg-[#20cbb0] transition flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={tokens.length >= 3}
             >
               <PlusIcon className="h-5 w-5" />
