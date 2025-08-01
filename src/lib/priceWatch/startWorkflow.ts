@@ -1,3 +1,11 @@
+// Typ für die Preis-API-Antwort pro Token
+type PriceApiResult = {
+  usdPrice?: number;
+  blockId?: number;
+  decimals?: number;
+  priceChange24h?: number;
+  [key: string]: unknown;
+};
 import { fetchJupiterPrices } from "@/lib/apiProviders/jupiter";
 import { fetchRaydiumPrices } from "@/lib/apiProviders/raydium";
 import { fetchBirdeyePrices } from "@/lib/apiProviders/birdeye";
@@ -28,8 +36,28 @@ export async function startPriceWatchWorkflow({
   const selectedProviders = apiProviders.filter((p) => activeResources[p.name]);
   // 2. API-Calls ausführen
   const results = await Promise.all(selectedProviders.map((p) => p.call(tokens)));
-  // 3. Ergebnisse zusammenfassen
-  const apiSummary = results.join("\n");
+  // Debug-Ausgabe der API-Rohdaten
+  console.log("[PriceWatch] API-Rohdaten für Email:", JSON.stringify(results, null, 2));
+  // 3. Ergebnisse schön formatieren
+  let apiSummary = "";
+  results.forEach((providerResult, i) => {
+    const providerName = selectedProviders[i]?.name || `Provider ${i+1}`;
+    apiSummary += `--- ${providerName} ---\n`;
+    if (providerResult && typeof providerResult === "object") {
+      Object.entries(providerResult as Record<string, PriceApiResult>).forEach(([token, data]) => {
+        apiSummary += `Token: ${token}\n`;
+        if (data && typeof data === "object") {
+          if (typeof data.usdPrice === "number") apiSummary += `Preis (USD): ${data.usdPrice}\n`;
+          if (typeof data.priceChange24h === "number") apiSummary += `24h Änderung: ${data.priceChange24h}%\n`;
+        } else {
+          apiSummary += `Daten: ${JSON.stringify(data)}\n`;
+        }
+        apiSummary += "---\n";
+      });
+    } else {
+      apiSummary += `Daten: ${JSON.stringify(providerResult)}\n---\n`;
+    }
+  });
   // 4. Email-Content generieren
   const emailContent = `${template}\n\n${apiSummary}`;
   // 5. Email-Service aufrufen

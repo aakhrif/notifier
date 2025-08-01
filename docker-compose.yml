@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  # Next.js Application (für Nginx Proxy Manager)
+  trades-notifier:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Port für direkten Zugriff und Nginx Proxy Manager
+    ports:
+      - "3000:3000"  # Direkter Zugriff für Development/Testing
+    expose:
+      - "3000"  # Für Nginx Proxy Manager
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+      - PORT=3000
+    networks:
+      - trades-network
+      - nginx-rp-manager_default  # Verbindung zum Nginx Proxy Manager Netzwerk
+    restart: unless-stopped
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 40s
+
+
+networks:
+  trades-network:
+    driver: bridge
+  nginx-rp-manager_default:
+    external: true
