@@ -19,6 +19,7 @@ export default function PriceWatchPage() {
   );
 
   const addToken = () => {
+    if (tokens.length >= 3) return;
     const trimmed = input.trim();
     if (trimmed && !tokens.includes(trimmed)) {
       setTokens([...tokens, trimmed]);
@@ -41,9 +42,40 @@ export default function PriceWatchPage() {
   const router = useRouter();
 
   return (
-    <div className="flex gap-8 max-w-6xl mx-auto p-8">
-      {/* Linker Bereich: Token-Adressen */}
-      <div className="w-1/2">
+    <div className="max-w-6xl mx-auto p-8">
+      {/* Sticky Start-Button ganz oben */}
+      <div className="w-full flex justify-center mb-8 sticky top-0 z-20 bg-[#f7fafc] py-6">
+        <button
+          type="button"
+          onClick={async () => {
+            const res = await fetch("/api/jobs", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                resources: activeResources,
+                tokens,
+                interval,
+                email,
+                template,
+              }),
+            });
+            if (res.ok) {
+              router.push("/jobs");
+            } else {
+              alert("Fehler beim Anlegen des Jobs!");
+            }
+          }}
+          className="px-6 py-3 rounded-lg bg-[#28ebcf] text-white font-bold shadow-lg hover:bg-[#20cbb0] transition flex items-center gap-2 text-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={
+            !email || !template || tokens.length === 0 || activeResources.length === 0
+          }
+        >
+          Start
+        </button>
+      </div>
+      <div className="flex gap-8">
+        {/* Linker Bereich: Token-Adressen */}
+        <div className="w-1/2">
         <h2 className="text-2xl font-bold mb-6 text-[#101112]">
           Einstellungen
         </h2>
@@ -96,6 +128,7 @@ export default function PriceWatchPage() {
             placeholder="E-Mail Adresse eingeben..."
           />
         </div>
+        {/*
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
           <h3 className="text-lg font-semibold mb-4">E-Mail Vorlage</h3>
           <textarea
@@ -105,6 +138,7 @@ export default function PriceWatchPage() {
             placeholder="E-Mail Vorlage eingeben..."
           />
         </div>
+        */}
         
       </div>
       {/* Rechter Bereich: Einstellungen */}
@@ -130,11 +164,13 @@ export default function PriceWatchPage() {
               onKeyDown={(e) => {
                 if (e.key === "Enter") addToken();
               }}
+              disabled={tokens.length >= 3}
             />
             <button
               type="button"
               onClick={addToken}
-              className="px-4 py-3 rounded-lg bg-[#28ebcf] text-white font-bold shadow-md hover:bg-[#20cbb0] transition flex items-center gap-2"
+              className="px-4 py-3 rounded-lg bg-[#28ebcf] text-white font-bold shadow-md hover:bg-[#20cbb0] transition flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={tokens.length >= 3}
             >
               <PlusIcon className="h-5 w-5" />
               Hinzufügen
@@ -168,35 +204,7 @@ export default function PriceWatchPage() {
             </ul>
           </div>
         )}
-
-        <div className="flex justify-center">
-          <button
-            type="button"
-            onClick={async () => {
-              const res = await fetch("/api/jobs", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  resources: activeResources,
-                  tokens,
-                  interval,
-                  email,
-                  template,
-                }),
-              });
-              if (res.ok) {
-                router.push("/jobs");
-              } else {
-                alert("Fehler beim Anlegen des Jobs!")
-                ;
-              }
-            }}
-            className="px-6 py-3 rounded-lg bg-[#28ebcf] text-white font-bold shadow-lg hover:bg-[#20cbb0] transition flex items-center gap-2 text-lg"
-          >
-            Start
-          </button>
-        </div>
-
+      </div>
       </div>
     </div>
   );
