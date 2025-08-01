@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { TrashIcon, PlusIcon } from "@heroicons/react/24/outline";
 
 
@@ -15,13 +16,7 @@ const intervals = [5, 10, 15, 20];
 export default function PriceWatchPage() {
   const [input, setInput] = useState("");
   const [tokens, setTokens] = useState<string[]>([]);
-  const [activeResources, setActiveResources] = useState<
-    Record<string, boolean>
-  >({
-    Jupiter: true,
-    Raydium: false,
-    Birdeye: false,
-  });
+  const [activeResources, setActiveResources] = useState<string[]>(["Jupiter"]);
   const [interval, setInterval] = useState<number>(10);
   const [email, setEmail] = useState("");
   const [template, setTemplate] = useState(
@@ -41,8 +36,14 @@ export default function PriceWatchPage() {
   };
 
   const toggleResource = (name: string) => {
-    setActiveResources((r) => ({ ...r, [name]: !r[name] }));
+    setActiveResources((prev) =>
+      prev.includes(name)
+        ? prev.filter((n) => n !== name)
+        : [...prev, name]
+    );
   };
+
+  const router = useRouter();
 
   return (
     <div className="flex gap-8 max-w-6xl mx-auto p-8">
@@ -61,7 +62,7 @@ export default function PriceWatchPage() {
               >
                 <input
                   type="checkbox"
-                  checked={activeResources[name]}
+                  checked={activeResources.includes(name)}
                   onChange={() => toggleResource(name)}
                   className="accent-[#28ebcf] h-5 w-5 rounded focus:ring-2 focus:ring-[#28ebcf]"
                 />
@@ -176,15 +177,13 @@ export default function PriceWatchPage() {
         <div className="flex justify-center">
           <button
             type="button"
-            onClick={async () => {
-              const emailContent = await startPriceWatchWorkflow({
-                tokens,
-                activeResources,
-                template,
-                email,
-                interval,
-              });
-              alert("API-Calls ausgeführt und Email-Service getriggert!\n\n" + emailContent);
+            onClick={() => {
+              console.log("Checked Ressourcen:", activeResources);
+              console.log("Tokens:", tokens);
+              console.log("Intervall:", interval);
+              console.log("Empfänger:", email);
+              console.log("Vorlage:", template);
+              router.push("/jobs");
             }}
             className="px-6 py-3 rounded-lg bg-[#28ebcf] text-white font-bold shadow-lg hover:bg-[#20cbb0] transition flex items-center gap-2 text-lg"
           >
