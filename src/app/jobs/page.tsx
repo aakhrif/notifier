@@ -59,12 +59,12 @@ export default function JobsPage() {
                   </div>
                   <div className="flex gap-2">
                     {job.status !== "stopped" && (
-                      <button onClick={() => handleStatus("stopped")} className="px-3 py-1 rounded bg-yellow-200 text-yellow-900 font-semibold hover:bg-yellow-300">Stoppen</button>
+<button onClick={() => handleStatus("stopped")} className="px-3 py-1 rounded bg-yellow-200 text-yellow-900 font-semibold hover:bg-yellow-300 cursor-pointer">Stoppen</button>
                     )}
                     {job.status === "stopped" && (
-                      <button onClick={() => handleStatus("active")} className="px-3 py-1 rounded bg-green-200 text-green-900 font-semibold hover:bg-green-300">Reaktivieren</button>
+<button onClick={() => handleStatus("active")} className="px-3 py-1 rounded bg-green-200 text-green-900 font-semibold hover:bg-green-300 cursor-pointer">Reaktivieren</button>
                     )}
-                    <button onClick={handleDelete} className="px-3 py-1 rounded bg-red-200 text-red-900 font-semibold hover:bg-red-300">Löschen</button>
+<button onClick={handleDelete} className="px-3 py-1 rounded bg-red-200 text-red-900 font-semibold hover:bg-red-300 cursor-pointer">Löschen</button>
                   </div>
                 </div>
                 <div className="text-gray-700 text-sm mt-2">

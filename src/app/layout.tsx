@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ConfigProvider from "@/context/ConfigProvider";
 import Sidebar from "./components/Sidebar";
+import { LoadingOverlayProvider } from "./components/LoadingOverlay";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,20 +23,22 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}> 
-        <ConfigProvider>
-              <div className="flex min-h-screen bg-gray-50">
-                <Sidebar />
-                <div className="flex flex-col flex-1 h-screen">
-                  {/* <header className="h-16 bg-[#18191a] flex items-center px-8 shadow-lg">
-                    <h1 className="text-2xl font-bold text-white tracking-tight">PriceNotifier Dashboard</h1>
-                  </header> */}
-                  <main className="flex-1 p-10 bg-gray-50">
-                    {children}
-                  </main>
-                </div>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <LoadingOverlayProvider>
+          <ConfigProvider>
+            <div className="flex min-h-screen bg-gray-50">
+              <Sidebar />
+              <div className="flex flex-col flex-1 h-screen">
+                {/* <header className="h-16 bg-[#18191a] flex items-center px-8 shadow-lg">
+                  <h1 className="text-2xl font-bold text-white tracking-tight">PriceNotifier Dashboard</h1>
+                </header> */}
+                <main className="flex-1 p-10 bg-gray-50">
+                  {children}
+                </main>
               </div>
-        </ConfigProvider>
+            </div>
+          </ConfigProvider>
+        </LoadingOverlayProvider>
       </body>
     </html>
   );

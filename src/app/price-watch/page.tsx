@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLoadingOverlay } from "../components/LoadingOverlay";
 import { useRouter } from "next/navigation";
 import { TrashIcon, PlusIcon } from "@heroicons/react/24/outline";
 
@@ -9,6 +10,7 @@ const resources = ["Jupiter", "Raydium", "Birdeye"];
 const intervals = [5, 10, 15, 20];
 
 export default function PriceWatchPage() {
+  const { show, hide } = useLoadingOverlay();
   const [input, setInput] = useState("");
   const [tokens, setTokens] = useState<string[]>([]);
   const [activeResources, setActiveResources] = useState<string[]>(["Jupiter"]);
@@ -48,20 +50,28 @@ export default function PriceWatchPage() {
         <button
           type="button"
           onClick={async () => {
-            const res = await fetch("/api/jobs", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                resources: activeResources,
-                tokens,
-                interval,
-                email,
-                template,
-              }),
-            });
-            if (res.ok) {
-              router.push("/jobs");
-            } else {
+            show("Job wird angelegt...");
+            try {
+              const res = await fetch("/api/jobs", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  resources: activeResources,
+                  tokens,
+                  interval,
+                  email,
+                  template,
+                }),
+              });
+              if (res.ok) {
+                // Overlay bleibt bis zur Weiterleitung sichtbar
+                router.push("/jobs");
+              } else {
+                hide();
+                alert("Fehler beim Anlegen des Jobs!");
+              }
+            } catch (e) {
+              hide();
               alert("Fehler beim Anlegen des Jobs!");
             }
           }}
