@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ConfigProvider from "@/context/ConfigProvider";
-import NotificationProvider from "@/context/NotificationProvider";
-import ApiStatusProvider from "@/context/ApiStatusProvider";
 import Sidebar from "./components/Sidebar";
 
 const geistSans = Geist({
@@ -26,8 +24,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}> 
         <ConfigProvider>
-          <ApiStatusProvider>
-            <NotificationProvider>
               <div className="flex min-h-screen bg-gray-50">
                 <Sidebar />
                 <div className="flex flex-col flex-1 h-screen">
@@ -39,8 +35,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                   </main>
                 </div>
               </div>
-            </NotificationProvider>
-          </ApiStatusProvider>
         </ConfigProvider>
       </body>
     </html>

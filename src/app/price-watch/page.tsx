@@ -1,6 +1,13 @@
 "use client";
+
 import { useState } from "react";
 import { TrashIcon, PlusIcon } from "@heroicons/react/24/outline";
+
+
+
+import { startPriceWatchWorkflow } from "@/lib/priceWatch/startWorkflow";
+
+
 
 const resources = ["Jupiter", "Raydium", "Birdeye"];
 const intervals = [5, 10, 15, 20];
@@ -93,7 +100,7 @@ export default function PriceWatchPage() {
             placeholder="E-Mail Adresse eingeben..."
           />
         </div>
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
           <h3 className="text-lg font-semibold mb-4">E-Mail Vorlage</h3>
           <textarea
             value={template}
@@ -102,6 +109,7 @@ export default function PriceWatchPage() {
             placeholder="E-Mail Vorlage eingeben..."
           />
         </div>
+        
       </div>
       {/* Rechter Bereich: Einstellungen */}
       <div className="w-1/2">
@@ -164,6 +172,26 @@ export default function PriceWatchPage() {
             </ul>
           </div>
         )}
+
+        <div className="flex justify-center">
+          <button
+            type="button"
+            onClick={async () => {
+              const emailContent = await startPriceWatchWorkflow({
+                tokens,
+                activeResources,
+                template,
+                email,
+                interval,
+              });
+              alert("API-Calls ausgeführt und Email-Service getriggert!\n\n" + emailContent);
+            }}
+            className="px-6 py-3 rounded-lg bg-[#28ebcf] text-white font-bold shadow-lg hover:bg-[#20cbb0] transition flex items-center gap-2 text-lg"
+          >
+            Start
+          </button>
+        </div>
+
       </div>
     </div>
   );
