@@ -41,3 +41,5 @@ export async function startPriceWatchWorkflow({
   });
   return emailContent;
 }
+
+export default startPriceWatchWorkflow;

@@ -18,6 +18,7 @@ model EmailJob {
   email      String
   template   String
   status     String   // "active" | "stopped" | "paused"
+  lastRun    DateTime? // Wann wurde zuletzt ausgeführt?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
