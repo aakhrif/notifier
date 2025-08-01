@@ -28,7 +28,12 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Job konnte nicht angelegt werden:", error);
     let message = "Job konnte nicht angelegt werden.";
-    if (typeof error === "object" && error && "message" in error && typeof (error as any).message === "string") {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "message" in error &&
+      typeof (error as Record<string, unknown>).message === "string"
+    ) {
       message = (error as { message: string }).message;
     }
     return NextResponse.json({ error: message }, { status: 500 });

@@ -16,7 +16,7 @@ export default function PriceWatchPage() {
   const [activeResources, setActiveResources] = useState<string[]>(["Jupiter"]);
   const [interval, setInterval] = useState<number>(10);
   const [email, setEmail] = useState("");
-  const [template, setTemplate] = useState(
+  const [template] = useState(
     "Hallo, dies ist deine Preisbenachrichtigung!"
   );
 
@@ -70,7 +70,7 @@ export default function PriceWatchPage() {
                 hide();
                 alert("Fehler beim Anlegen des Jobs!");
               }
-            } catch (e) {
+            } catch {
               hide();
               alert("Fehler beim Anlegen des Jobs!");
             }
