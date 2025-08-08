@@ -32,7 +32,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 {/* <header className="h-16 bg-[#18191a] flex items-center px-8 shadow-lg">
                   <h1 className="text-2xl font-bold text-white tracking-tight">PriceNotifier Dashboard</h1>
                 </header> */}
-                <main className="flex-1 p-10 bg-gray-50">
+                <main className="flex-1 p-1 bg-gray-50">
                   {children}
                 </main>
               </div>
